@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Headcount</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    #landing, #main-app {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #landing {
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+      z-index: 2;
+    }
+
+    #landing .overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+
+    #main-app {
+      background-image: url('https://images.pexels.com/photos/4101555/pexels-photo-4101555.jpeg');
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      background-color: #ff5733;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #e14e2d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Landing Page -->
+  <div id="landing">
+    <div class="overlay">
+      <h1 style="font-size: 4rem; font-weight:bold; margin-bottom: 1rem;">Smart Headcount</h1>
+      <p style="font-size: 1.5rem; margin-bottom: 2rem;">Empowering vision with real-time intelligence.</p>
+      <button class="btn" onclick="startApp()">Let's Begin</button>
+    </div>
+  </div>
+
+  <!-- Main App Interface -->
+  <div id="main-app" class="flex">
+    <div class="bg-white bg-opacity-30 backdrop-blur-md shadow-lg rounded-3xl p-10 w-[90%] max-w-md text-center border border-white border-opacity-40">
+      <h1 class="text-4xl font-extrabold text-white mb-6 drop-shadow-lg">Smart Headcount</h1>
+
+      <form action="/detect" method="post" enctype="multipart/form-data" class="flex flex-col gap-4">
+        <input type="file" name="image" class="file-input file-input-bordered w-full bg-white bg-opacity-70 rounded" required>
+        <button type="submit" class="bg-purple-700 hover:bg-purple-800 text-white py-2 px-4 rounded-lg transition-all duration-200">
+          Detect Person(s)
+        </button>
+      </form>
+
+      <a href="/live" target="_blank" class="mt-4 inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-all duration-200">
+        Live Camera Detection
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const showMainApp = urlParams.get('main-app') === 'true';
+
+    if (showMainApp) {
+      document.getElementById("landing").style.display = "none";
+      document.getElementById("main-app").style.display = "flex";
+    } else {
+      const images = [
+        "https://images.pexels.com/photos/4275885/pexels-photo-4275885.jpeg",
+        "https://images.pexels.com/photos/933054/pexels-photo-933054.jpeg",
+        "https://images.pexels.com/photos/207247/pexels-photo-207247.jpeg",
+        "https://images.pexels.com/photos/714258/pexels-photo-714258.jpeg"
+      ];
+      let index = 0;
+
+      function changeBackground() {
+        document.getElementById("landing").style.backgroundImage = `url('${images[index]}')`;
+        index = (index + 1) % images.length;
+      }
+
+      changeBackground();
+      const slideshowInterval = setInterval(changeBackground, 4000);
+
+      function startApp() {
+        clearInterval(slideshowInterval);
+        document.getElementById("landing").style.display = "none";
+        document.getElementById("main-app").style.display = "flex";
+      }
+    }
+  </script>
+
+</body>
+</html>
